@@ -1,0 +1,23 @@
+name: 🔗 Check for Broken Links
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 3 * * 0'  # every Sunday 3AM UTC
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Install lychee (Rust-based link checker)
+        uses: lycheeverse/lychee-action@v1.6.1
+
+      - name: 🔎 Run lychee to check all HTML and markdown files
+        run: |
+          lychee --verbose --no-progress --exclude-all-private --timeout 20s "**/*.html" "**/*.md"
